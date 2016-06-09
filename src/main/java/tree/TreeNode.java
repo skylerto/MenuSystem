@@ -123,4 +123,32 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         int index = parent.children.indexOf(this);
         return parent.children.get(index - 1);
     }
+
+    /**
+     * Add left sibling
+     *
+     * @param node add the node as the left sibling to the current node
+     */
+    public void addLeftSibling(T node) {
+        if (parent == null) {
+            return;
+        }
+        int index = parent.children.indexOf(this);
+        TreeNode<T> element = new TreeNode<T>(node);
+        parent.children.add(index, element);
+    }
+
+    /**
+     * Add right sibling
+     *
+     * @param node add the node as the right sibling to the current node
+     */
+    public void addRightSibling(T node) {
+        if (parent == null) {
+            return;
+        }
+        int index = parent.children.indexOf(this);
+        TreeNode<T> element = new TreeNode<T>(node);
+        parent.children.add(index + 1, element);
+    }
 }
