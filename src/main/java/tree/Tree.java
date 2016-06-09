@@ -14,9 +14,8 @@ interface Tree<T> {
 
     T getLeftSibling();
 
-    void addLeftSibling(T element);
-
-    void addRightSibling(T element);
-
+//    void addLeftSibling(T element);
+//
+//    void addRightSibling(T element);
 
 }

@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Skyler Layne © 2016
  */
 
-public class TreeNode<T> implements Iterable<TreeNode<T>>, Tree<T> {
+public class TreeNode<T> implements Iterable<TreeNode<T>>, Tree<TreeNode<T>> {
 
     public T data;
     public TreeNode<T> parent;
