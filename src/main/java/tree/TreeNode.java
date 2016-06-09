@@ -1,5 +1,7 @@
 package tree;
 
+import bean.MenuItemBean;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -76,4 +78,49 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         return iter;
     }
 
+    /**
+     * Does the current node have a right sibling?
+     *
+     * @return - true of the current node has a right sibling
+     */
+    public boolean hasRightSibling() {
+        if (parent == null) {
+            return false;
+        }
+        int index = parent.children.indexOf(this);
+        return index < parent.children.size();
+    }
+
+    /**
+     * Does the current node have a left sibling?
+     *
+     * @return - true if the current node has a left sibling
+     */
+    public boolean hasLeftSibling() {
+        if (parent == null) {
+            return false;
+        }
+        int index = parent.children.indexOf(this);
+        return index > 0;
+    }
+
+    /**
+     * Get the right sibling of the current node
+     *
+     * @return the node directly to the right of the current node
+     */
+    public TreeNode<T> getRightSibling() throws NullPointerException, IndexOutOfBoundsException {
+        int index = parent.children.indexOf(this);
+        return parent.children.get(index + 1);
+    }
+
+    /**
+     * Get the left sibling of the current node
+     *
+     * @return the node directly to the left of the current node
+     */
+    public TreeNode<T> getLeftSibling() {
+        int index = parent.children.indexOf(this);
+        return parent.children.get(index - 1);
+    }
 }

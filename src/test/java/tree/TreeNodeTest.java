@@ -1,18 +1,15 @@
-package util;
+package tree;
 
 import org.junit.Test;
-import tree.TreeNode;
-
-import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 
 /**
- * This class represents ...
+ * This class tests the TreeNodeClass
  * <p>
  * Created by Skyler Layne © 2016
  */
-public class TreeTest {
+public class TreeNodeTest {
     @Test
     public void testConstructor() throws Exception {
         TreeNode<String> tree = new TreeNode<>(null);
@@ -28,7 +25,6 @@ public class TreeTest {
     public void testIterator() throws Exception {
         TreeNode<String> tree = new TreeNode<>(null);
         tree.addChild("one");
-        System.out.println(tree.isRoot());
 
         TreeNode<String> one = tree.children.get(0);
         System.out.println(one.isRoot());
@@ -38,7 +34,7 @@ public class TreeTest {
         tree.addChild("two");
 
         tree.iterator().forEachRemaining(e -> {
-            System.out.println(e.data);
+          //  System.out.println(e.data);
         });
     }
 }
