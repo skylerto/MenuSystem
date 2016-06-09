@@ -1,7 +1,5 @@
 package tree;
 
-import bean.MenuItemBean;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.List;
  * Created by Skyler Layne © 2016
  */
 
-public class TreeNode<T> implements Iterable<TreeNode<T>> {
+public class TreeNode<T> implements Iterable<TreeNode<T>>, Tree<T> {
 
     public T data;
     public TreeNode<T> parent;
@@ -109,6 +107,7 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
      *
      * @return the node directly to the right of the current node
      */
+    @Override
     public TreeNode<T> getRightSibling() throws NullPointerException, IndexOutOfBoundsException {
         int index = parent.children.indexOf(this);
         return parent.children.get(index + 1);
@@ -119,6 +118,7 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
      *
      * @return the node directly to the left of the current node
      */
+    @Override
     public TreeNode<T> getLeftSibling() {
         int index = parent.children.indexOf(this);
         return parent.children.get(index - 1);
