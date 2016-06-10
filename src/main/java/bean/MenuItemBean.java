@@ -1,11 +1,13 @@
 package bean;
 
+import export.Csvable;
+
 /**
  * This class is a data model for what a menu item is transformed into.
  * <p>
  * Created by Skyler Layne © 2016
  */
-public class MenuItemBean {
+public class MenuItemBean implements Csvable {
 
     private int id;
     private int ref;

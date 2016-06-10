@@ -13,7 +13,7 @@ import java.io.IOException;
 public class ExportCsv<T> implements Exporter {
 
     private String filename;
-    Tree<T> tree;
+    private Tree<T> tree;
 
     private ExportCsv(String filename) {
         this.filename = filename;
