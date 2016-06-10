@@ -1,5 +1,7 @@
 package tree;
 
+import export.Csvable;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
  * Created by Skyler Layne © 2016
  */
 
-public class TreeNode<T> implements Iterable<TreeNode<T>>, Tree<TreeNode<T>> {
+public class TreeNode<T extends Csvable> implements Iterable<TreeNode<T>>, Tree<TreeNode<T>>, Csvable {
 
     public T data;
     public TreeNode<T> parent;
@@ -150,5 +152,16 @@ public class TreeNode<T> implements Iterable<TreeNode<T>>, Tree<TreeNode<T>> {
         int index = parent.children.indexOf(this);
         TreeNode<T> element = new TreeNode<T>(node);
         parent.children.add(index + 1, element);
+    }
+
+    @Override
+    public String getCsv() {
+        StringBuilder csv = new StringBuilder();
+        this.iterator().forEachRemaining(item -> {
+            csv.append(item.data.getCsv());
+            csv.append("\n");
+        });
+
+        return csv.toString();
     }
 }
