@@ -9,33 +9,28 @@ public class MenuItemBean {
 
     private int id;
     private int ref;
-    private String lcd1; // The top level of the display
-
-    private String lcd2; // The bottom level of the display
-
-    private byte mode; // What the mode of the menu item
-
-    private byte back; // Ref # of parent
-
-
-    private byte left; // Ref # of left sibling
-    private byte right; // Ref # of the right sibling
-    private byte select; // Action upon commit.
+    private String lcd1;
+    private String lcd2;
+    private byte mode;
+    private byte back;
+    private byte left;
+    private byte right;
+    private byte select;
     private byte usr1; // default 0
     private byte usr2; // default 0
-    private byte enable; // Encrypted or not.
+    private byte enable;
 
     /**
      * Construct a new MenuItemBean.
      *
-     * @param lcd1
-     * @param lcd2
-     * @param mode
-     * @param back
-     * @param left
-     * @param select
-     * @param right
-     * @param enable
+     * @param lcd1 the first line to be displayed.
+     * @param lcd2 the second line to be displayed.
+     * @param mode the mode for the menu item to run in.
+     * @param back the ref of the menu item to go back to.
+     * @param left the ref of the menu item to go left to.
+     * @param select the action to occur when the select is clicked (down a menu item/ execute code).
+     * @param right the ref of the menu item to go right to.
+     * @param enable is this menu item encrypted of not.
      */
     public MenuItemBean(String lcd1, String lcd2, byte mode, byte back, byte left, byte select, byte right, byte enable) {
         this.lcd1 = lcd1;
