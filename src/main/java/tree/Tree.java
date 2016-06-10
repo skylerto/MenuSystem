@@ -5,7 +5,7 @@ package tree;
  * <p>
  * Created by Skyler Layne © 2016
  */
-interface Tree<T> {
+public interface Tree<T> {
     boolean hasRightSibling();
 
     boolean hasLeftSibling();

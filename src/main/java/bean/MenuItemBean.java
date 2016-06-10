@@ -1,7 +1,7 @@
 package bean;
 
 /**
- * This class represents a MenuItemBean
+ * This class is a data model for what a menu item is transformed into.
  * <p>
  * Created by Skyler Layne © 2016
  */
@@ -151,5 +151,35 @@ public class MenuItemBean {
 
     public void setEnable(byte enable) {
         this.enable = enable;
+    }
+
+    /**
+     * Return a CSV of the current record.
+     *
+     * @return the CSV as a string
+     */
+    public String getCsv() {
+        StringBuilder csv = new StringBuilder();
+        csv.append(this.lcd1);
+        csv.append(",");
+        csv.append(this.lcd2);
+        csv.append(",");
+        csv.append(this.mode);
+        csv.append(",");
+        csv.append(this.back);
+        csv.append(",");
+        csv.append(this.left);
+        csv.append(",");
+        csv.append(this.select);
+        csv.append(",");
+        csv.append(this.right);
+        csv.append(",");
+        csv.append(this.usr1);
+        csv.append(",");
+        csv.append(this.usr2);
+        csv.append(",");
+        csv.append(this.enable);
+
+        return csv.toString();
     }
 }
