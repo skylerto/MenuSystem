@@ -16,17 +16,13 @@ import java.net.URL;
  * Created by Skyler Layne © 2016
  */
 public class Main extends Application {
-    final static Logger logger = Logger.getLogger(Main.class.getName());
+    final static Logger logger = Logger.getLogger(Main.class);
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        /**
-         * Create the controller
-         */
-        Controller controller = Controller.getInstance();
-        logger.info("Controller Created: " + logger);
+        logger.info("app init: " + this);
 
         /**
          * Start gui.

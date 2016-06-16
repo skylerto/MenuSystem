@@ -1,5 +1,6 @@
 package tree;
 
+import bean.MenuItemBean;
 import export.Csvable;
 import org.apache.log4j.Logger;
 
@@ -34,8 +35,8 @@ public class TreeNode<T extends Csvable> implements Iterable<TreeNode<T>>, Tree<
 
     public TreeNode(T data) {
         this.data = data;
-        this.children = new LinkedList<TreeNode<T>>();
-        this.elementsIndex = new LinkedList<TreeNode<T>>();
+        this.children = new LinkedList<>();
+        this.elementsIndex = new LinkedList<>();
         this.elementsIndex.add(this);
     }
 
@@ -165,7 +166,7 @@ public class TreeNode<T extends Csvable> implements Iterable<TreeNode<T>>, Tree<
      * @param node add the node as the right sibling to the current node
      */
     public void addRightSibling(T node) {
-        if (parent == null) {
+        if (this.isRoot()) {
             return;
         }
         int index = parent.children.indexOf(this);
@@ -182,5 +183,19 @@ public class TreeNode<T extends Csvable> implements Iterable<TreeNode<T>>, Tree<
         });
 
         return csv.toString();
+    }
+
+    /**
+     * Add Siblings to the end.
+     *
+     * @param bean - sibling to be added.
+     */
+    public void addSibling(T bean) {
+        if (this.isRoot()) {
+            return;
+        }
+        int index = parent.children.indexOf(this);
+        TreeNode<T> element = new TreeNode<T>(bean);
+        parent.children.add(element);
     }
 }

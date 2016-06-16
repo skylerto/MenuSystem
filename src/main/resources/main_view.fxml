@@ -12,8 +12,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import gui.controller.Controller?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="698.0" prefWidth="968.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="698.0" prefWidth="968.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.Controller">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -67,7 +68,7 @@
          <children>
             <ToolBar prefHeight="43.0" prefWidth="615.0">
               <items>
-                <Button mnemonicParsing="false" text="Add Item" />
+                <Button mnemonicParsing="false" onAction="#addItemAction" text="Add Item" />
                   <Button mnemonicParsing="false" text="Add Child" />
               </items>
             </ToolBar>
