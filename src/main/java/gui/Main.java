@@ -1,5 +1,6 @@
 package gui;
 
+import gui.controller.Controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,9 +16,21 @@ import java.net.URL;
  * Created by Skyler Layne © 2016
  */
 public class Main extends Application {
+    final static Logger logger = Logger.getLogger(Main.class.getName());
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        /**
+         * Create the controller
+         */
+        Controller controller = Controller.getInstance();
+        logger.info("Controller Created: " + logger);
+
+        /**
+         * Start gui.
+         */
 
         String sceneFile = "main_view.fxml";
         Parent root = null;

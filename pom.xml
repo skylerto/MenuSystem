@@ -12,10 +12,10 @@
     <packaging>jar</packaging>
 
     <properties>
-      <jdk.version>1.8</jdk.version>
-      <jodatime.version>2.5</jodatime.version>
-      <junit.version>4.11</junit.version>
-      <log4j.version>1.2.17</log4j.version>
+        <jdk.version>1.8</jdk.version>
+        <jodatime.version>2.5</jodatime.version>
+        <junit.version>4.11</junit.version>
+        <log4j.version>1.2.17</log4j.version>
     </properties>
 
     <dependencies>
@@ -31,51 +31,64 @@
             <version>1.2.17</version>
         </dependency>
     </dependencies>
-  <build>
-  <finalName>menu-system</finalName>
-    <plugins>
+    <build>
+        <finalName>menu-system</finalName>
+        <plugins>
 
-      <!-- download source code in Eclipse, best practice -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-eclipse-plugin</artifactId>
-        <version>2.9</version>
-        <configuration>
-          <downloadSources>true</downloadSources>
-          <downloadJavadocs>false</downloadJavadocs>
-        </configuration>
-      </plugin>
+            <!-- download source code in Eclipse, best practice -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>false</downloadJavadocs>
+                </configuration>
+            </plugin>
 
-      <!-- Set a JDK compiler level -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>${jdk.version}</source>
-          <target>${jdk.version}</target>
-        </configuration>
-      </plugin>
+            <!-- Set a JDK compiler level -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
+            </plugin>
 
-      <!-- Make this jar executable -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <!-- DO NOT include log4j.properties file in your Jar -->
-          <excludes>
-          <exclude>**/log4j.properties</exclude>
-          </excludes>
-          <archive>
-          <manifest>
-            <!-- Jar file entry point -->
-            <mainClass>gui.Main</mainClass>
-          </manifest>
-          </archive>
-        </configuration>
-      </plugin>
+            <!-- Maven Assembly Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <!-- get all project dependencies -->
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <!-- MainClass in mainfest make a executable jar -->
+                    <archive>
+                        <manifest>
+                            <mainClass>gui.Main</mainClass>
+                        </manifest>
+                    </archive>
 
-    </plugins>
-  </build>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <!-- bind to the packaging phase -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+        </plugins>
+    </build>
 
 </project>
