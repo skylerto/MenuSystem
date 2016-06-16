@@ -22,20 +22,6 @@ public class MenuTreeTest {
         assertEquals(tree.data, null);
         assertEquals(tree.children.get(0).data, bean);
     }
-    @Test(expected=IndexOutOfBoundsException.class)
-    public void testIndexError()throws Exception {
-        MenuItemBean bean = new MenuItemBean("first", "second", (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0);
-        TreeNode<MenuItemBean> tree = new TreeNode<>(null);
-
-        tree.addChild(bean);
-        assertEquals(tree.hasRightSibling(), false);
-        assertEquals(tree.hasLeftSibling(), false);
-
-        TreeNode<MenuItemBean> root = tree.children.get(0);
-        root.getLeftSibling();
-        root.getRightSibling();
-
-    }
 
     @Test
     public void testHasRightSibling() throws Exception {
@@ -116,5 +102,27 @@ public class MenuTreeTest {
         assertEquals(current.hasLeftSibling(), false);
         current = current.getRightSibling();
         assertEquals(current.getLeftSibling().data, one);
+    }
+
+    @Test
+    public void testGetCsv() throws Exception {
+        MenuItemBean bean = new MenuItemBean("first", "second", (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0);
+        MenuItemBean one = new MenuItemBean("first", "second", (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0);
+        MenuItemBean two = new MenuItemBean("first", "second", (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0);
+        MenuItemBean three = new MenuItemBean("first", "second", (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0);
+        TreeNode<MenuItemBean> tree = new TreeNode<>(new MenuItemBean());
+        tree.addChild(bean);
+        assertEquals(tree.hasRightSibling(), false);
+        assertEquals(tree.hasLeftSibling(), false);
+        TreeNode<MenuItemBean> root = tree.children.get(0);
+        root.addChild(one);
+        root.addChild(two);
+        root.addChild(three);
+        TreeNode<MenuItemBean> current = root.children.get(0);
+        assertEquals(current.hasRightSibling(), true);
+        assertEquals(current.hasLeftSibling(), false);
+        current = current.getRightSibling();
+        assertEquals(current.getLeftSibling().data, one);
+        System.out.print(tree.getCsv());
     }
 }

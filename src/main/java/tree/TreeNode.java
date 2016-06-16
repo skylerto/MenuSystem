@@ -1,6 +1,7 @@
 package tree;
 
 import export.Csvable;
+import org.apache.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,6 +15,8 @@ import java.util.List;
  */
 
 public class TreeNode<T extends Csvable> implements Iterable<TreeNode<T>>, Tree<TreeNode<T>>, Csvable {
+
+    final static Logger log = Logger.getLogger(TreeNode.class);
 
     public T data;
     public TreeNode<T> parent;
@@ -85,10 +88,13 @@ public class TreeNode<T extends Csvable> implements Iterable<TreeNode<T>>, Tree<
      */
     public boolean hasRightSibling() {
         if (parent == null) {
+            log.info("no right sibling");
             return false;
         }
         int index = parent.children.indexOf(this);
-        return index < parent.children.size();
+        boolean right = index < parent.children.size();
+        log.info("Has a right sibling? " + right);
+        return right;
     }
 
     /**
@@ -98,10 +104,13 @@ public class TreeNode<T extends Csvable> implements Iterable<TreeNode<T>>, Tree<
      */
     public boolean hasLeftSibling() {
         if (parent == null) {
+            log.info("no left child");
             return false;
         }
         int index = parent.children.indexOf(this);
-        return index > 0;
+        boolean left = index > 0;
+        log.info("Has a right sibling? " + left);
+        return left;
     }
 
     /**
@@ -110,9 +119,14 @@ public class TreeNode<T extends Csvable> implements Iterable<TreeNode<T>>, Tree<
      * @return the node directly to the right of the current node
      */
     @Override
-    public TreeNode<T> getRightSibling() throws NullPointerException, IndexOutOfBoundsException {
-        int index = parent.children.indexOf(this);
-        return parent.children.get(index + 1);
+    public TreeNode<T> getRightSibling() {
+        try {
+            int index = parent.children.indexOf(this);
+            return parent.children.get(index + 1);
+        } catch(NullPointerException | IndexOutOfBoundsException e) {
+            log.error(e);
+        }
+        return null;
     }
 
     /**
@@ -122,8 +136,13 @@ public class TreeNode<T extends Csvable> implements Iterable<TreeNode<T>>, Tree<
      */
     @Override
     public TreeNode<T> getLeftSibling() {
-        int index = parent.children.indexOf(this);
-        return parent.children.get(index - 1);
+        try {
+            int index = parent.children.indexOf(this);
+            return parent.children.get(index - 1);
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
+            log.error(e);
+        }
+        return null;
     }
 
     /**

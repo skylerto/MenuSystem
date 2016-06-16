@@ -1,6 +1,8 @@
 package gui.controller;
 
-import menu.MenuItem;
+import bean.MenuItemBean;
+import tree.Tree;
+import tree.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +14,12 @@ import java.util.List;
  */
 public class Controller {
     private static Controller instance = null;
-    public List<MenuItem> menuItems;
+    public TreeNode<MenuItemBean> menuItems;
+    public int level;
 
     private Controller() {
-        this.menuItems = new ArrayList<MenuItem>();
+        this.menuItems = new TreeNode<>(new MenuItemBean());
+        this.level = 1;
     }
 
     public static Controller getInstance() {
@@ -25,9 +29,12 @@ public class Controller {
         return instance;
     }
 
-    public void add(MenuItem item){
-        this.menuItems.add(item);
-        System.out.println(item);
+    /**
+     * Add  new menu item on the current level.
+     * @param item
+     */
+    public void add(MenuItemBean item) {
+
     }
 
 }

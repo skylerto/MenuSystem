@@ -22,16 +22,25 @@ public class MenuItemBean implements Csvable {
     private byte usr2; // default 0
     private byte enable;
 
+    private boolean root;
+
+    /**
+     * Default constructor, used to create the root of a tree.
+     */
+    public MenuItemBean() {
+        this.root = true;
+    }
+
     /**
      * Construct a new MenuItemBean.
      *
-     * @param lcd1 the first line to be displayed.
-     * @param lcd2 the second line to be displayed.
-     * @param mode the mode for the menu item to run in.
-     * @param back the ref of the menu item to go back to.
-     * @param left the ref of the menu item to go left to.
+     * @param lcd1   the first line to be displayed.
+     * @param lcd2   the second line to be displayed.
+     * @param mode   the mode for the menu item to run in.
+     * @param back   the ref of the menu item to go back to.
+     * @param left   the ref of the menu item to go left to.
      * @param select the action to occur when the select is clicked (down a menu item/ execute code).
-     * @param right the ref of the menu item to go right to.
+     * @param right  the ref of the menu item to go right to.
      * @param enable is this menu item encrypted of not.
      */
     public MenuItemBean(String lcd1, String lcd2, byte mode, byte back, byte left, byte select, byte right, byte enable) {
@@ -45,8 +54,12 @@ public class MenuItemBean implements Csvable {
         this.enable = enable;
         this.usr1 = 0;
         this.usr2 = 0;
+        this.root = false;
     }
 
+    public boolean isRoot() {
+        return root;
+    }
 
     /**
      * Return the reference number of the current MenuItemBean.

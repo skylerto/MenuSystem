@@ -14,10 +14,10 @@ public class ExportCsvTest {
 
     @Test
     public void testValidFilename() throws Exception {
-        ExportCsv exporter = new ExportCsv("filename", new TreeNode("node"));
+        ExportCsv exporter = new ExportCsv("filename", new TreeNode(null));
         assertEquals(exporter.validFilename(), "filename.csv");
 
-        exporter = new ExportCsv("filename.csv", new TreeNode("node"));
+        exporter = new ExportCsv("filename.csv", new TreeNode(null));
         assertEquals(exporter.validFilename(), "filename.csv");
     }
 }

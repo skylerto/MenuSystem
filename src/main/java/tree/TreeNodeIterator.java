@@ -1,5 +1,7 @@
 package tree;
 
+import export.Csvable;
+
 import java.util.Iterator;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Iterator;
  * <p>
  * Created by Skyler Layne © 2016
  */
-public class TreeNodeIterator<T> implements Iterator<TreeNode<T>> {
+public class TreeNodeIterator<T extends Csvable> implements Iterator<TreeNode<T>> {
 
     enum ProcessStages {
         ProcessParent, ProcessChildCurNode, ProcessChildSubNode
