@@ -2,15 +2,19 @@ package gui.controller;
 
 import bean.MenuItemBean;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
+import tree.Tree;
 import tree.TreeNode;
 
 /**
@@ -26,6 +30,19 @@ public class Controller {
     public TreeNode<MenuItemBean> root;
     public int level;
     private TreeNode<MenuItemBean> current;
+    private static TreeNode<MenuItemBean> empty = new TreeNode<>(new MenuItemBean());
+
+    @FXML
+    HBox parentLayer;
+
+    @FXML
+    HBox currentLayer;
+
+    @FXML
+    HBox childrenLayer;
+
+    @FXML
+    BorderPane mainPane;
 
     public Controller() {
         if (instance == null) {
@@ -38,6 +55,7 @@ public class Controller {
 
     /**
      * Add  new menu item on the current level.
+     *
      * @param item
      */
     public void add(MenuItemBean item) {
@@ -115,7 +133,7 @@ public class Controller {
                 MenuItemBean bean = new MenuItemBean(lcd1, lcd2, mode, parent, left, right, select, enable);
                 logger.info("Menu Item Created: " + bean);
 
-                if(level == 0) {
+                if (level == 0) {
                     root.addChild(bean);
                     this.current = root.children.get(0);
                     level++;
@@ -124,17 +142,159 @@ public class Controller {
                 }
                 logger.info(root.getCsv());
 
+
+                TreeNode<MenuItemBean> item = new TreeNode<MenuItemBean>(bean);
+                // add vbox
+                currentLayer.getChildren().add(menuNode(item));
+
+
                 dialog.close();
             } catch (Exception e) {
                 logger.error("Error in object creation", e);
             }
-
-
         });
 
         Scene dialogScene = new Scene(dialogVbox, 300, 725);
         dialog.setScene(dialogScene);
         dialog.show();
 
+    }
+
+    private Node menuNode(TreeNode<MenuItemBean> item) {
+        VBox box = new VBox();
+
+        box.setStyle("-fx-border-color: none;");
+
+        Label lcd1Label = new Label("LCD1: " + item.data.getLcd1());
+        box.getChildren().add(lcd1Label);
+
+        Label lcd2Label = new Label("LCD2: " + item.data.getLcd2());
+        box.getChildren().add(lcd2Label);
+
+        Label modeLabel = new Label("MODE: " + item.data.getMode());
+        box.getChildren().add(modeLabel);
+
+        Label parentLabel = new Label("PARENT(BACK): " + item.data.getBack());
+        box.getChildren().add(parentLabel);
+
+        Label leftLabel = new Label("LEFT: " + item.data.getLeft());
+        box.getChildren().add(leftLabel);
+
+        Label rightLabel = new Label("RIGHT: " + item.data.getRight());
+        box.getChildren().add(rightLabel);
+
+        Label selectLabel = new Label("SELECT: " + item.data.getSelect());
+        box.getChildren().add(selectLabel);
+
+        Label enableLabel = new Label("ENABLE: " + item.data.getEnable());
+        box.getChildren().add(enableLabel);
+
+        box.setPadding(new Insets(10));
+
+        box.setOnMouseClicked((event) -> {
+//            logger.info(box.styleProperty().getValue().contains("grey"));
+            currentLayer.getChildren()
+                    .filtered(e -> e.styleProperty().getValue().contains("grey"))
+                    .forEach(i -> {
+                        i.setStyle("-fx-border-color: none;");
+                    });
+
+            if (current.equals(item)) {
+                current = empty;
+                removeSideBar();
+            } else {
+                box.setStyle("-fx-border-color: grey;");
+                current = item;
+                addSideBar(item);
+            }
+        });
+
+        return box;
+    }
+
+    private void removeSideBar() {
+        mainPane.setRight(new VBox());
+    }
+
+    private void addSideBar(TreeNode<MenuItemBean> item) {
+        VBox box = new VBox();
+
+        Text title = new Text("Component: ");
+        box.getChildren().add(title);
+
+        HBox b = new HBox();
+        Label lcd1Label = new Label("LCD1:");
+        TextField lcd1Input = new TextField(item.data.getLcd1());
+        b.getChildren().add(lcd1Label);
+        b.getChildren().add(lcd1Input);
+        box.getChildren().add(b);
+        b = null;
+
+        b = new HBox();
+        Label lcd2Label = new Label("LCD2:");
+        TextField lcd2Input = new TextField(item.data.getLcd2());
+        b.getChildren().add(lcd2Label);
+        b.getChildren().add(lcd2Input);
+        box.getChildren().add(b);
+        b = null;
+
+        b = new HBox();
+        Label modeLabel = new Label("MODE:");
+        TextField modeInput = new TextField("" + item.data.getMode());
+        b.getChildren().add(modeLabel);
+        b.getChildren().add(modeInput);
+        box.getChildren().add(b);
+        b = null;
+
+        b = new HBox();
+        Label parentLabel = new Label("PARENT(BACK):");
+        TextField parentInput = new TextField("" + item.data.getBack());
+        b.getChildren().add(parentLabel);
+        b.getChildren().add(parentInput);
+        box.getChildren().add(b);
+        b = null;
+
+        b = new HBox();
+        Label leftLabel = new Label("LEFT:");
+        TextField leftInput = new TextField("" + item.data.getLeft());
+        b.getChildren().add(leftLabel);
+        b.getChildren().add(leftInput);
+        box.getChildren().add(b);
+        b = null;
+
+
+        b = new HBox();
+        Label rightLabel = new Label("RIGHT:");
+        TextField rightInput = new TextField("" + item.data.getRight());
+        b.getChildren().add(rightLabel);
+        b.getChildren().add(rightInput);
+        box.getChildren().add(b);
+        b = null;
+
+        b = new HBox();
+        Label selectLabel = new Label("SELECT:");
+        TextField selectInput = new TextField("" + item.data.getSelect());
+        b.getChildren().add(selectLabel);
+        b.getChildren().add(selectInput);
+        box.getChildren().add(b);
+        b = null;
+
+        b = new HBox();
+        Label enableLabel = new Label("SELECT:");
+        TextField enableInput = new TextField("" + item.data.getEnable());
+        b.getChildren().add(enableLabel);
+        b.getChildren().add(enableInput);
+        box.getChildren().add(b);
+        b = null;
+
+        Button update = new Button("Update");
+        box.getChildren().add(update);
+
+        Button addChild = new Button("Add Child");
+        box.getChildren().add(addChild);
+
+        box.setPadding(new Insets(20,50,20,20));
+
+        mainPane.setRight(box);
     }
 }
