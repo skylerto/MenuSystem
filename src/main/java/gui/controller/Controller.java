@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import kit.MenuItemKit;
 import org.apache.log4j.Logger;
 import tree.Tree;
 import tree.TreeNode;
@@ -43,6 +44,8 @@ public class Controller {
 
     @FXML
     BorderPane mainPane;
+
+    Button addChild;
 
     public Controller() {
         if (instance == null) {
@@ -119,34 +122,21 @@ public class Controller {
         dialogVbox.getChildren().add(addButton);
         addButton.setOnAction((event) -> {
             try {
-                String lcd1 = lcd1Input.getText();
-                String lcd2 = lcd2Input.getText();
-
-
-                Byte mode = Byte.parseByte(modeInput.getText());
-                Byte parent = Byte.parseByte(parentInput.getText());
-                Byte left = Byte.parseByte(leftInput.getText());
-                Byte right = Byte.parseByte(rightInput.getText());
-                Byte select = Byte.parseByte(selectInput.getText());
-                Byte enable = Byte.parseByte(enableInput.getText());
-
-                MenuItemBean bean = new MenuItemBean(lcd1, lcd2, mode, parent, left, right, select, enable);
+                MenuItemBean bean = new MenuItemKit().make(lcd1Input, lcd2Input, modeInput, parentInput, leftInput, rightInput, selectInput, enableInput);
                 logger.info("Menu Item Created: " + bean);
+                TreeNode<MenuItemBean> item = new TreeNode<MenuItemBean>(bean);
 
                 if (level == 0) {
                     root.addChild(bean);
-                    this.current = root.children.get(0);
+                    this.current = empty;
                     level++;
+                    currentLayer.getChildren().add(menuNode(item));
                 } else {
                     this.current.addSibling(bean);
+                    currentLayer.getChildren().add(menuNode(item));
                 }
+
                 logger.info(root.getCsv());
-
-
-                TreeNode<MenuItemBean> item = new TreeNode<MenuItemBean>(bean);
-                // add vbox
-                currentLayer.getChildren().add(menuNode(item));
-
 
                 dialog.close();
             } catch (Exception e) {
@@ -192,19 +182,25 @@ public class Controller {
         box.setPadding(new Insets(10));
 
         box.setOnMouseClicked((event) -> {
-//            logger.info(box.styleProperty().getValue().contains("grey"));
-            currentLayer.getChildren()
-                    .filtered(e -> e.styleProperty().getValue().contains("grey"))
-                    .forEach(i -> {
-                        i.setStyle("-fx-border-color: none;");
-                    });
+            box.setStyle("-fx-border-color: none;");
 
-            if (current.equals(item)) {
-                current = empty;
+            currentLayer.getChildren().forEach(e -> {
+                e.setStyle("-fx-border-color: none;");
+            });
+
+            childrenLayer.getChildren().forEach(e -> {
+                e.setStyle("-fx-border-color: none;");
+            });
+
+
+            if (this.current.equals(item)) {
+                this.current = empty;
+                logger.info(this.current);
                 removeSideBar();
             } else {
                 box.setStyle("-fx-border-color: grey;");
-                current = item;
+                this.current = item;
+                logger.info(this.current);
                 addSideBar(item);
             }
         });
@@ -280,7 +276,7 @@ public class Controller {
         b = null;
 
         b = new HBox();
-        Label enableLabel = new Label("SELECT:");
+        Label enableLabel = new Label("ENABLE:");
         TextField enableInput = new TextField("" + item.data.getEnable());
         b.getChildren().add(enableLabel);
         b.getChildren().add(enableInput);
@@ -289,12 +285,123 @@ public class Controller {
 
         Button update = new Button("Update");
         box.getChildren().add(update);
+        update.setOnAction((event) -> {
+            updateMenuNode(item, lcd1Input, lcd2Input, modeInput, parentInput, leftInput, rightInput, selectInput, enableInput);
+        });
 
-        Button addChild = new Button("Add Child");
+        addChild = new Button("Add Child");
         box.getChildren().add(addChild);
+        addChild.setOnAction(this::addChildAction);
 
-        box.setPadding(new Insets(20,50,20,20));
+        box.setPadding(new Insets(20, 50, 20, 20));
 
         mainPane.setRight(box);
+    }
+
+    private void updateMenuNode(TreeNode<MenuItemBean> item, TextField lcd1Input, TextField lcd2Input, TextField modeInput, TextField parentInput, TextField leftInput, TextField rightInput, TextField selectInput, TextField enableInput) {
+        try {
+            String lcd1 = lcd1Input.getText();
+            String lcd2 = lcd2Input.getText();
+            Byte mode = Byte.parseByte(modeInput.getText());
+            Byte parent = Byte.parseByte(parentInput.getText());
+            Byte left = Byte.parseByte(leftInput.getText());
+            Byte right = Byte.parseByte(rightInput.getText());
+            Byte select = Byte.parseByte(selectInput.getText());
+            Byte enable = Byte.parseByte(enableInput.getText());
+
+            item.data.setLcd1(lcd1);
+            item.data.setLcd2(lcd2);
+            item.data.setMode(mode);
+            item.data.setBack(parent);
+            item.data.setLeft(left);
+            item.data.setRef(right);
+            item.data.setSelect(select);
+            item.data.setEnable(enable);
+            logger.info("Menu Item updated: " + item);
+
+            logger.info(item.getCsv());
+
+            mainPane.requestLayout();
+
+        } catch (Exception e) {
+            logger.error("Error in object creation", e);
+        }
+    }
+
+    private void addChildAction(ActionEvent actionEvent) {
+        logger.info("Add item: " + actionEvent.getSource());
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        VBox dialogVbox = new VBox(20);
+        dialogVbox.setPadding(new Insets(10));
+
+        Label lcd1Label = new Label("lcd1");
+        TextField lcd1Input = new TextField();
+        dialogVbox.getChildren().add(lcd1Label);
+        dialogVbox.getChildren().add(lcd1Input);
+
+        Label lcd2Label = new Label("lcd2");
+        TextField lcd2Input = new TextField();
+        dialogVbox.getChildren().add(lcd2Label);
+        dialogVbox.getChildren().add(lcd2Input);
+
+        Label modeLabel = new Label("mode");
+        TextField modeInput = new TextField();
+        dialogVbox.getChildren().add(modeLabel);
+        dialogVbox.getChildren().add(modeInput);
+
+        Label parentLabel = new Label("parent(back)");
+        TextField parentInput = new TextField();
+        dialogVbox.getChildren().add(parentLabel);
+        dialogVbox.getChildren().add(parentInput);
+
+        Label leftLabel = new Label("left sibling");
+        TextField leftInput = new TextField();
+        dialogVbox.getChildren().add(leftLabel);
+        dialogVbox.getChildren().add(leftInput);
+
+        Label rightLabel = new Label("right sibling");
+        TextField rightInput = new TextField();
+        dialogVbox.getChildren().add(rightLabel);
+        dialogVbox.getChildren().add(rightInput);
+
+        Label selectLabel = new Label("select");
+        TextField selectInput = new TextField();
+        dialogVbox.getChildren().add(selectLabel);
+        dialogVbox.getChildren().add(selectInput);
+
+        Label enableLabel = new Label("enable");
+        TextField enableInput = new TextField();
+        dialogVbox.getChildren().add(enableLabel);
+        dialogVbox.getChildren().add(enableInput);
+
+        Button addButton = new Button("Add Item");
+        dialogVbox.getChildren().add(addButton);
+        addButton.setOnAction((event) -> {
+            try {
+                MenuItemBean bean = new MenuItemKit().make(lcd1Input, lcd2Input, modeInput, parentInput, leftInput, rightInput, selectInput, enableInput);
+                logger.info("Menu Item Created: " + bean);
+                TreeNode<MenuItemBean> item = new TreeNode<MenuItemBean>(bean);
+
+                if (level == 0) {
+                    root.addChild(bean);
+                    this.current = empty;
+                    level++;
+                    currentLayer.getChildren().add(menuNode(item));
+                } else {
+                    this.current.addChild(bean);
+                    childrenLayer.getChildren().add(menuNode(item));
+                }
+                logger.info(root.getCsv());
+
+                dialog.close();
+            } catch (Exception e) {
+                logger.error("Error in object creation", e);
+            }
+        });
+
+        Scene dialogScene = new Scene(dialogVbox, 300, 725);
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
 }
